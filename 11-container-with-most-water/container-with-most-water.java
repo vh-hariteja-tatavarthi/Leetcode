@@ -6,8 +6,8 @@ class Solution {
         while(i<j){
             int maxHeight= Math.min(height[i],height[j]);
             maxArea= Math.max(maxArea, maxHeight*(j-i));
-            if(height[i]<height[j]) i++;
-            else j--; 
+            while (i < j && height[i] <= maxHeight) i++;
+            while (i < j && height[j] <= maxHeight) j--;
         }
     return maxArea;
     }
