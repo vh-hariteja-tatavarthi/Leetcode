@@ -1,51 +1,58 @@
 class Solution {
-    public List<List<Integer>> palindromePairs(String[] words) {
-        List<List<Integer>> res = new ArrayList<>();
-        Map<String, Integer> wordMap = new HashMap<>();
-        int n = words.length;
-        
-        // Build the map: word -> index
-        for (int i = 0; i < n; i++) {
-            wordMap.put(words[i], i);
+    public boolean isPalindrome(String s) {
+        int i = 0;
+        int j = s.length() - 1;
+        while (i < j) {
+            if (s.charAt(i) != s.charAt(j))
+                return false;
+            i++;
+            j--;
         }
-        
-        for (int i = 0; i < n; i++) {
+        return true;
+    }
+
+    public List<List<Integer>> palindromePairs(String[] words) {
+
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        HashMap<String, Integer> mapper = new HashMap<>();
+
+        for (int i = 0; i < words.length; i++) {
+            mapper.put(words[i], i);
+        }
+
+        for (int i = 0; i < words.length; i++) {
             String s = words[i];
+
             for (int k = 0; k <= s.length(); k++) {
                 String left = s.substring(0, k);
-                String right = s.substring(k);
-                
-                // Case 1: left is palindrome
+                String right = s.substring(k, s.length());
+
+
                 if (isPalindrome(left)) {
                     String reversedRight = new StringBuilder(right).reverse().toString();
-                    if (wordMap.containsKey(reversedRight)) {
-                        int j = wordMap.get(reversedRight);
-                        if (j != i) {
-                            res.add(Arrays.asList(j, i));
+
+                    if (mapper.containsKey(reversedRight)) {
+
+                        int j=mapper.get(reversedRight);
+                        if(i!=j){
+                            List<Integer> arr = Arrays.asList(j,i);
+                            result.add(arr);
                         }
                     }
                 }
-                
-                // Case 2: right is non-empty palindrome
-                if (!right.isEmpty() && isPalindrome(right)) {
-                    String reversedLeft = new StringBuilder(left).reverse().toString();
-                    if (wordMap.containsKey(reversedLeft)) {
-                        int j = wordMap.get(reversedLeft);
-                        if (j != i) {
-                            res.add(Arrays.asList(i, j));
+                if(!right.isEmpty()&& isPalindrome(right)){
+                    String reversedLeft= new StringBuilder(left).reverse().toString();
+
+                    if(mapper.containsKey(reversedLeft)){
+                        int j= mapper.get(reversedLeft);
+                        if(i!=j){
+                            List<Integer> arr= Arrays.asList(i,j);
+                            result.add(arr);
                         }
                     }
                 }
             }
         }
-        return res;
-    }
-    
-    private boolean isPalindrome(String s) {
-        int l = 0, r = s.length() - 1;
-        while (l < r) {
-            if (s.charAt(l++) != s.charAt(r--)) return false;
-        }
-        return true;
+        return result;
     }
 }
