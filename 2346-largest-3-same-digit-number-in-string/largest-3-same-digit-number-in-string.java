@@ -1,23 +1,22 @@
 class Solution {
     public String largestGoodInteger(String num) {
-        StringBuilder sb= new StringBuilder();
-        int start=0;
-        while(start<num.length()-3+1){
-            int end=start;
-            while(end-start<3){
-                if(num.charAt(end)==num.charAt(start)) end++;
-                else break;
-            }
-            if(end-start==3){
-                if(sb.length()==0||num.charAt(start)>sb.charAt(0)){
-                    sb.setLength(0);
-                    sb.append(num.substring(start,end));
+        String best = "";
+        int n = num.length();
+
+        for (int i = 0; i < n; ) {
+            char c = num.charAt(i);
+            int j = i;
+            while (j < n && num.charAt(j) == c) j++;
+
+            // Check if we have exactly 3 equal digits
+            if (j - i >= 3) {
+                String candidate = "" + c + c + c;
+                if (best.isEmpty() || candidate.compareTo(best) > 0) {
+                    best = candidate;
                 }
             }
-            while(start<end){
-                start++;
-            }
+            i = j; // skip over this run
         }
-        return sb.toString();    
+        return best;
     }
 }
